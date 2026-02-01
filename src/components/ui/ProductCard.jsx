@@ -4,7 +4,10 @@ import { Link } from "react-router";
 const ProductCard = () => {
   return (
     <div className="border border-primary/20 hover:shadow-sm transition relative rounded-2xl overflow-hidden w-full">
-      <Link to="/" className="bg-secondary py-4 flex justify-center">
+      <Link
+        to="/shop/productslug"
+        className="bg-secondary py-4 flex justify-center"
+      >
         <img src="/product.png" alt="product" className="w-auto max-w-full" />
       </Link>
       <div className="bg-theme p-3">
