@@ -1,7 +1,11 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
+import { useGetProductDetailsQuery } from "../services/api";
+import { useParams } from "react-router";
 const ProductDetails = () => {
+  const { id } = useParams();
+  const { data, isLoading } = useGetProductDetailsQuery(id);
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   let sliderRef1 = useRef(null);
@@ -15,6 +19,8 @@ const ProductDetails = () => {
     dots: false,
     arrows: false,
   };
+  console.log(data);
+
   return (
     <section className="py-120">
       <div className="container">
@@ -28,15 +34,11 @@ const ProductDetails = () => {
                 ref={(slider) => (sliderRef1 = slider)}
                 className="w-full h-full max-w-3/5"
               >
-                <div>
-                  <img src="/product-4.png" alt="" className="w-full h-full" />
-                </div>
-                <div>
-                  <img src="/product-2.png" alt="" className="w-full h-full" />
-                </div>
-                <div>
-                  <img src="/product-3.png" alt="" className="w-full h-full" />
-                </div>
+                {data?.images.map((img) => (
+                  <div key={img}>
+                    <img src={img} alt="" className="w-full h-full" />
+                  </div>
+                ))}
               </Slider>
             </div>
             {/* Images List */}
@@ -48,21 +50,13 @@ const ProductDetails = () => {
               swipeToSlide={true}
               focusOnSelect={true}
             >
-              <div>
-                <div className="border border-primary/30 w-fit mx-2 flex items-center justify-center rounded-xl">
-                  <img src="/product-4.png" alt="" className="w-4/5" />
+              {data?.images?.map((img) => (
+                <div key={img}>
+                  <div className="border border-primary/30 w-fit mx-2 flex items-center justify-center rounded-xl">
+                    <img src={img} alt="" className="w-4/5" />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div className="border border-primary/30 w-fit mx-2 flex items-center justify-center rounded-xl">
-                  <img src="/product-2.png" alt="" className="w-4/5" />
-                </div>
-              </div>
-              <div>
-                <div className="border border-primary/30 w-fit mx-2 flex items-center justify-center rounded-xl">
-                  <img src="/product-3.png" alt="" className="w-4/5" />
-                </div>
-              </div>
+              ))}
             </Slider>
           </div>
           <div></div>
