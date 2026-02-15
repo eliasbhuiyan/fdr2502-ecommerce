@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
+import { useGetCategoryListQuery } from "../../services/api";
 
 const Categories = () => {
+  const { data } = useGetCategoryListQuery();
   const category = [
     {
       title: "Mobile",
@@ -39,24 +41,24 @@ const Categories = () => {
           <h2 className="heading">
             Shop From Top <span>Categories</span>
           </h2>
-          <Link to="/">View All</Link>
+          <Link to="/shop">View All</Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-4">
-          {category.map((item) => (
+          {data?.slice(0,8).map((item) => (
             <Link
-              // to={item.link}
-              key={item.title}
+              to={`/shop?category=${item}`}
+              key={item}
               className="flex flex-col items-center"
             >
               <div className="bg-secondary w-32 h-32 border border-transparent hover:border-brand hover:shadow-2xl rounded-full flex items-center justify-center">
                 <img
-                  src={item.src}
+                  src={"/product.png"}
                   alt="category"
                   className="w-auto h-auto max-w-4/5 max-h-4/5"
                 />
               </div>
-              <h3 className="mt-5 text-primary font-medium text-base">
-                {item.title}
+              <h3 className="mt-5 text-primary font-medium text-base capitalize">
+                {item}
               </h3>
             </Link>
           ))}

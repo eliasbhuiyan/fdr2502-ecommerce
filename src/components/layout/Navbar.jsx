@@ -9,11 +9,14 @@ import {
   FaWindowClose,
 } from "react-icons/fa";
 import { Link } from "react-router";
+import { useGetCategoryListQuery } from "../../services/api";
 
 const Navbar = () => {
   const [openDropDown, setOpenDropDown] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef(null);
+  const { data } = useGetCategoryListQuery()
+
   const categories = [
     {
       title: "Phone",
@@ -185,16 +188,16 @@ const Navbar = () => {
       </nav>
       {/* Desktop Product Categories*/}
       <div className="py-4 border-y border-secondary hidden md:block">
-        <div className="container flex gap-5">
-          {categories.map((item) => (
-            <div key={item.title} className="relative group">
-              <Link className="bg-third inline-block hover:bg-brand py-2 px-3 text-base font-medium rounded-2xl text-[#222222] hover:text-theme">
-                <div className="flex items-center gap-1">
-                  <p>{item.title}</p>
-                  <BiChevronDown className="text-2xl" />
+        <div className="container flex flex-wrap gap-x-5 gap-y-1">
+          {data?.slice(0, 10).map((item) => (
+            <div key={item} className="relative group">
+              <Link to={`/shop?category=${item}`} className="bg-third inline-block hover:bg-brand py-2 px-3 text-base font-medium rounded-2xl text-[#222222] hover:text-theme">
+                <div className="flex items-center gap-1 text-sm text-nowrap capitalize">
+                  <p>{item}</p>
+                  {/* <BiChevronDown className="text-2xl" /> */}
                 </div>
               </Link>
-              <ul className="absolute top-full left-0 transition invisible opacity-0 group-hover:visible group-hover:opacity-100 w-48 rounded-2xl space-y-2 bg-theme shadow text-base text-primary font-medium">
+              {/* <ul className="absolute top-full left-0 transition invisible opacity-0 group-hover:visible group-hover:opacity-100 w-48 rounded-2xl space-y-2 bg-theme shadow text-base text-primary font-medium">
                 {item.children.map((child) => (
                   <li key={child.title}>
                     <Link
@@ -205,14 +208,14 @@ const Navbar = () => {
                     </Link>
                   </li>
                 ))}
-              </ul>
+              </ul> */}
             </div>
           ))}
         </div>
       </div>
       {/* Mobile Sidebar */}
       <div
-        className={`${isOpen ? "opacity-100 visible" : "opacity-0 invisible"} transition md:hidden fixed top-0 left-0 w-full h-screen bg-primary/80`}
+        className={`${isOpen ? "opacity-100 visible" : "opacity-0 invisible"} transition md:hidden fixed top-0 left-0 w-full h-screen bg-primary/80 z-50`}
       >
         <div
           ref={navRef}
@@ -228,15 +231,15 @@ const Navbar = () => {
             </button>
           </div>
           <ul className="space-y-4 text-primary font-bold text-lg mb-5 pb-5 border-b border-secondary">
-            {categories.map((item) => (
-              <li key={item.title}>
+            {data?.slice(0,10).map((item) => (
+              <li key={item}>
                 <div className="flex justify-between items-center">
-                  <Link to={item.to}>{item.title}</Link>
-                  <button onClick={() => setOpenDropDown(item.title)}>
+                  <Link to={item}>{item}</Link>
+                  {/* <button onClick={() => setOpenDropDown(item.title)}>
                     <FaChevronRight />
-                  </button>
+                  </button> */}
                 </div>
-                <ul
+                {/* <ul
                   className={`${openDropDown === item.title ? "block" : "hidden"} font-semibold text-base pl-2 space-y-2 mt-2`}
                 >
                   {item.children.map((child) => (
@@ -244,7 +247,7 @@ const Navbar = () => {
                       <Link>{child.title}</Link>
                     </li>
                   ))}
-                </ul>
+                </ul> */}
               </li>
             ))}
           </ul>

@@ -1,8 +1,15 @@
 import React from "react";
 import { Link } from "react-router";
 import ProductCard from "../ui/ProductCard";
+import { useGetProductsQuery } from "../../services/api";
 
 const BestDeal = () => {
+  const { data, isError, error, isLoading } = useGetProductsQuery({
+      limit: 6,
+      category: "smartphones"
+    });
+    console.log(data);
+    
   return (
     <section className="py-120">
       <div className="container">
@@ -10,15 +17,14 @@ const BestDeal = () => {
           <h2 className="heading">
             Grab the best deal on <span>Smartphones</span>
           </h2>
-          <Link to="/">View All</Link>
+          <Link to="/shop?category=smartphones">View All</Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {
+            data?.products.map((item)=>(
+              <ProductCard key={item.id} data={item}/>
+            ))
+          }
         </div>
       </div>
     </section>
